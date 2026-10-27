@@ -17,13 +17,24 @@ const dow=ds=>{const[y,m,d]=ds.split("-").map(Number);return new Date(Date.UTC(y
 const pretty=ds=>{const[y,m,d]=ds.split("-").map(Number);return MON[m-1]+" "+d};
 function miles(a,b,c,d){const R=3958.8,r=x=>x*Math.PI/180,dl=r(c-a),dn=r(d-b);
   const h=Math.sin(dl/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
-function hoursOn(r,ds){if(!r.wk)return null;let s=r.wk[dow(ds)];
-  if(r.over)for(const o of r.over)if(ds>=o.from&&ds<=o.to)s=Array.isArray(o.h)?o.h[dow(ds)]:o.h;return segs(s)}
+// dated sessions pulled from rink calendars (sessions.js); used instead of weekly hours on the days they cover
+const FEED=typeof SESSIONS!=="undefined"?SESSIONS:null;
+const DATED={};
+if(FEED)for(const [rid,acts] of Object.entries(FEED.sessions))for(const [a,list] of Object.entries(acts)){
+  const m=(DATED[rid]=DATED[rid]||{})[a]={};
+  for(const [d,s,e,t] of list)(m[d]=m[d]||[]).push([toMin(s),toMin(e),t])}
+const datedFor=(rid,a)=>(DATED[rid]||{})[a]||null;
+const inFeed=ds=>FEED&&ds>=FEED.from&&ds<=FEED.to;
+// overlapping sessions (e.g. two rinks at once) drawn as one bar
+function merge(h){const o=[];for(const [a,b] of [...h].sort((x,y)=>x[0]-y[0])){const l=o[o.length-1];if(l&&a<=l[1])l[1]=Math.max(l[1],b);else o.push([a,b])}return o}
+function hoursOn(r,ds){if(r.dated&&inFeed(ds))return r.dated[ds]||[];
+  if(!r.wk)return null;let s=r.wk[dow(ds)];
+  if(r.over)for(const o of r.over)if(ds>=o.from&&ds<=o.to)s=Array.isArray(o.h)?o.h[dow(ds)]:o.h;return s===null?null:segs(s)}
 
 // status for a rink on a date; nowMin only when date is today
 function status(r,ds,nowMin,noun){noun=noun||"public skate";
-  const h=hoursOn(r,ds);
-  const notYet=r.start?ds<r.start:(!r.yearRound&&!r.inSeasonNow);
+  const raw=hoursOn(r,ds),h=raw&&merge(raw);
+  const notYet=(r.start?ds<r.start:(!r.yearRound&&!r.inSeasonNow))&&!(r.dated&&raw&&raw.length);
   if(r.end&&ds>r.end)return{k:"off",t:"Season over",h:[],ghost:false,skating:false};
   if(notYet)return{k:"plan",t:r.start?"Opens "+DOW[dow(r.start)]+", "+pretty(r.start):"Opens Nov · date TBA",h:h||[],ghost:true,skating:false};
   if(!h)return{k:"plan",t:r.actInfo?"Offered · times on rink calendar":"Times vary · check schedule",h:[],ghost:false,skating:null,vary:true};
@@ -64,9 +75,11 @@ sortSel.value=store.get("rinkSort")||"dist";
 const openSet=new Set();
 let act=store.get("rinkAct")||"public"; if(!ACTIVITIES.some(a=>a.id===act))act="public";
 // a rink as seen through one activity: its own hours (or none) and season
-function asAct(r,a){if(a==="public")return r;const x=(ACTS[r.id]||{})[a];if(!x)return null;
+function asAct(r,a){const dated=datedFor(r.id,a);
+  if(a==="public")return dated?Object.assign({},r,{dated,conf:"live"}):r;
+  const x=(ACTS[r.id]||{})[a];if(!x)return null;
   return Object.assign({},r,{wk:x.wk||null,over:x.over||null,start:x.start!==undefined?x.start:r.start,end:x.end!==undefined?x.end:r.end,
-    conf:x.wk?"confirmed":"info",actInfo:x})}
+    conf:dated?"live":x.wk?"confirmed":"info",actInfo:x,dated})}
 const offers=(r,a)=>a==="public"||!!(ACTS[r.id]||{})[a];
 function buildActs(){const box=$("acts");box.innerHTML="";
   for(const a of ACTIVITIES){const n=RINKS.filter(r=>offers(r,a.id)).length,b=document.createElement("button");
@@ -121,20 +134,21 @@ function render(){
     const pillCls={open:"s-open",soon:"s-soon",off:"s-off",plan:"s-plan"}[s.k];
     let bars=gridLines;
     if(s.vary)bars+=`<div class="novary">${r.actInfo?"Times are on the rink's own calendar":"Session times vary, see the rink's schedule"}</div>`;
+    const raw=hoursOn(r,day)||[];
     for(const [a,b] of s.h){const past=isToday&&!s.ghost&&b<=NOW.min;
-      bars+=`<div class="seg${s.ghost?" ghost":""}${past?" past":""}" style="left:${pct(a)}%;width:${pct(b)-pct(a)}%" title="${range([a,b])}">${(pct(b)-pct(a))>14?range([a,b]):""}</div>`}
+      const names=raw.filter(x=>x[2]&&x[0]<b&&x[1]>a).map(x=>range(x)+" "+x[2]).join("\n");
+      bars+=`<div class="seg${s.ghost?" ghost":""}${past?" past":""}" style="left:${pct(a)}%;width:${pct(b)-pct(a)}%" title="${(names||range([a,b])).replace(/"/g,"&quot;")}">${(pct(b)-pct(a))>14?range([a,b]):""}</div>`}
     if(isToday&&NOW.min>=AX0)bars+=`<div class="now" style="left:${pct(NOW.min)}%"></div>`;
-    const confTxt={confirmed:"2026–27 hours",posted:"Official hours",last:"Based on last season",vary:"Times vary",info:"Check rink calendar"}[r.conf];
+    const confTxt={confirmed:"2026–27 hours",posted:"Official hours",last:"Based on last season",vary:"Times vary",info:"Check rink calendar",live:"Live from rink calendar"}[r.conf];
     const season=r.yearRound?"Year-round":(r.start?pretty(r.start):(r.startLabel||"In season"))+(r.end?" – "+pretty(r.end)+", "+r.end.slice(0,4):"");
     const pillText=s.plain?(s.h.length>1?s.h.length+(act==="lessons"?" class times":" sessions"):A.label):s.t;
     const others=ACTIVITIES.filter(a=>a.id!=="public"&&a.id!==act&&offers(r,a.id)).map(a=>`<span class="tag">${a.label}</span>`).join("");
     const actName=act==="public"?"public skate":A.label.toLowerCase();
     // weekly table Mon..Sun
     let week="";
-    if(r.wk){for(const i of [1,2,3,4,5,6,0]){
-      // find the date in the next 7 days with this weekday so overrides apply
-      let ds=NOW.date;for(let k=0;k<7;k++){const c=addDays(NOW.date,k);if(dow(c)===i){ds=c;break}}
-      const h=hoursOn(r,ds);week+=`<tr class="${dow(day)===i?"sel":""}"><td>${DOW[i]}</td><td>${h.length?h.map(range).join("<br>"):"None"}</td></tr>`}}
+    // the next seven days in date order, so holiday and calendar changes show up
+    if(r.wk||r.dated){for(let k=0;k<7;k++){const ds=addDays(NOW.date,k);
+      const h=hoursOn(r,ds)||[];week+=`<tr class="${ds===day?"sel":""}"><td>${DOW[dow(ds)]}<small>${pretty(ds)}</small></td><td>${h.length?h.map(x=>range(x)+(x[2]?`<small>${x[2]}</small>`:"")).join(""):"None"}</td></tr>`}}
     el.innerHTML=`<summary>
       <div class="head">
         <div class="name"><h2>${r.name}</h2><span class="where">${r.where}</span></div>
@@ -145,7 +159,7 @@ function render(){
       ${others?`<div class="tags" aria-label="Also offers">${others}</div>`:""}
     </summary>
     <div class="detail">
-      <div><h3>Weekly ${actName}</h3>${r.wk?`<table class="week"><tbody>${week}</tbody></table>`:`<p class="note">${r.actInfo?"This rink doesn't publish fixed weekly times. Book through its calendar.":"Session times aren't fixed. Check the live schedule."}</p>`}
+      <div><h3>Next 7 days: ${actName}</h3>${(r.wk||r.dated)?`<table class="week"><tbody>${week}</tbody></table>`:`<p class="note">${r.actInfo?"This rink doesn't publish fixed weekly times. Book through its calendar.":"Session times aren't fixed. Check the live schedule."}</p>`}
         ${r.actInfo?`<p style="margin-top:10px">${r.actInfo.info}</p><p><a href="${r.actInfo.url}" target="_blank" rel="noopener">${A.label} at ${r.name} ↗</a></p>`:""}</div>
       <div class="facts">
         <div><h3>Season</h3><p>${season}</p></div>
@@ -162,6 +176,7 @@ near.onchange=()=>{store.set("rinkNear",near.value);render()};
 sortSel.onchange=()=>{store.set("rinkSort",sortSel.value);render()};
 $("onlyOpen").onchange=render;$("onlyNow").onchange=render;
 buildTicks();render();
-{const [y,m,d]=UPDATED.split("-").map(Number);$("updated").textContent="Schedules last updated "+MON[m-1]+" "+d+", "+y+".";}
+{const [y,m,d]=UPDATED.split("-").map(Number);$("updated").textContent="Rink details last checked "+MON[m-1]+" "+d+", "+y+"."+
+  (FEED?" Rinks marked “Live from rink calendar” refresh daily from their own calendars (last pulled "+pretty(FEED.updated.slice(0,10))+" at "+fmt(toMin(FEED.updated.slice(11)))+").":"");}
 setInterval(()=>{const n=nyNow();if(n.date!==NOW.date&&day===NOW.date)day=n.date;render()},60000);
 })();

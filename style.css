@@ -74,13 +74,14 @@ details.rink>summary:hover{background:color-mix(in srgb,var(--track) 45%,transpa
 .novary{font-size:12.5px;color:var(--muted);display:flex;align-items:center;height:100%;padding:0 8px}
 .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
 .conf{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-.conf.c-confirmed,.conf.c-posted{color:var(--open)}.conf.c-last{color:var(--soon)}.conf.c-vary{color:var(--off)}
+.conf.c-confirmed,.conf.c-posted,.conf.c-live{color:var(--open)}.conf.c-last{color:var(--soon)}.conf.c-vary{color:var(--off)}
 .detail{padding:4px 16px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
 @media (max-width:620px){.detail{grid-template-columns:minmax(0,1fr)}}
 .detail h3{font-family:var(--display);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:13px;color:var(--muted);margin:0 0 6px}
 table.week{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
 table.week td{padding:4px 0;border-bottom:1px dashed var(--line);vertical-align:top}
 table.week td:first-child{width:52px;font-weight:600}
+table.week td small{display:block;color:var(--muted);font-size:12px;font-weight:400}
 table.week tr.sel td{color:var(--blue);font-weight:600}
 .facts{display:flex;flex-direction:column;gap:10px;font-size:14px}
 .facts p{margin:0}

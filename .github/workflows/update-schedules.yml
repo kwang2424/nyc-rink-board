@@ -1,0 +1,29 @@
+name: Update rink schedules
+
+on:
+  schedule:
+    - cron: "17 10 * * *"   # daily, ~6 AM New York time
+  workflow_dispatch:        # "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r scripts/requirements.txt
+      - run: python scripts/update_schedules.py
+      - name: Commit if changed
+        run: |
+          # ignore the timestamp line so unchanged schedules don't create a commit every day
+          if git diff --quiet -I'^SESSIONS\.updated=' -- sessions.js; then echo "No schedule changes"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sessions.js
+          git commit -m "Update rink schedules from calendars"
+          git push

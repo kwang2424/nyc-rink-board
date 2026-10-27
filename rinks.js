@@ -57,16 +57,22 @@ const RINKS=[
   note:"Indoor, open year-round. Holiday hours differ.",phone:"(718) 760-9001",
   url:"https://www.nycgovparks.org/facilities/iceskating/10"},
  {id:"abestark",name:"Abe Stark Rink",where:"Coney Island Boardwalk · Brooklyn",lat:40.5730,lng:-73.9830,io:"Indoor",
-  start:null,end:"2027-03-21",inSeasonNow:true,conf:"last",
-  wk:["13:30-16:00","","","","","","13:30-16:00"],
-  price:"Call for prices.",
-  note:"Open for the season. Public skate has been weekend afternoons; 2026 times not posted.",
-  phone:"(718) 946-6536",url:"https://www.nycgovparks.org/opportunities/concessions/listing?id=189"},
+  start:"2026-10-17",end:"2027-03-21",conf:"confirmed",
+  wk:["12:30-15:30","","","","","","12:30-15:30"],
+  over:[{from:"2026-11-03",to:"2026-11-03",h:"12:00-15:30"},{from:"2026-11-11",to:"2026-11-11",h:"12:00-15:30"},
+        {from:"2026-11-27",to:"2026-11-27",h:"12:00-15:30"},{from:"2026-12-24",to:"2026-12-25",h:""},
+        {from:"2026-12-26",to:"2027-01-01",h:"12:00-15:30"},{from:"2027-02-15",to:"2027-02-19",h:"12:00-15:30"}],
+  price:"$14 for adults, seniors and kids. Rental $7. Skate-assist sled $15.",
+  note:"Public skate is weekends only, plus school holidays: Election Day, Veterans Day, the day after Thanksgiving, winter break and Presidents' Day week. Closed Dec 24–25. Hours come from a local family guide; the rink doesn't post them online.",
+  url:"https://www.nycgovparks.org/facilities/iceskating/1"},
  {id:"skyrink",name:"Sky Rink at Chelsea Piers",where:"Pier 61 · Chelsea",lat:40.7466,lng:-74.0083,io:"Indoor",
-  start:null,end:null,yearRound:true,conf:"vary",wk:null,
-  price:"See Chelsea Piers for general-skate prices.",
-  note:"Indoor, year-round general skating. Session times change week to week and aren't published far ahead.",
-  url:"https://www.chelseapiers.com/skyrink-chelsea"}
+  start:null,end:null,yearRound:true,conf:"posted",
+  wk:["13:00-14:20,14:30-15:50","13:30-15:10,15:20-16:50","13:30-14:30,14:40-15:50","14:45-15:50","13:30-14:30,14:40-15:50","13:30-15:10,15:20-16:50","13:00-14:20,14:30-15:50"],
+  over:[{from:"2026-10-30",to:"2026-10-30",h:"13:30-15:10,15:20-16:50,20:30-21:50"},
+        {from:"2026-11-25",to:"2026-11-29",h:null},{from:"2026-12-19",to:"2027-12-31",h:null}],
+  price:"See Chelsea Piers for general-skate prices. Reserve a session online.",
+  note:"Fall general skating runs through Dec 18. Holiday sessions (Thanksgiving week and Dec 19 – Jan 2) have their own times; 2027 sessions aren't posted yet. Halloween Adult Skate Night: Fri, Oct 30, 8:30–9:50 PM.",
+  url:"https://bondsports.co/activity/programs/General%20Skating/10955"}
 ];
 
 const PLACES=[
@@ -123,7 +129,11 @@ const ACTS={
   lessons:{info:"Learn to Skate school for ages 4 through adult.",url:"https://www.nycgovparks.org/facilities/iceskating/10"},
   hockey:{info:"Hockey programs, including adult open hockey. Call for current times.",url:"https://www.nycgovparks.org/facilities/iceskating/10"},
   figure:{info:"Freestyle sessions for figure skaters.",url:"https://www.nycgovparks.org/facilities/iceskating/10"}},
+ abestark:{
+  hockey:{info:"Hockey programs run October through March, and the rink is a location for the NHL/NHLPA Learn to Play program. Times aren't posted online.",url:"https://www.learntoplay.nhl.com/locations/rangers/"},
+  lessons:{info:"Last season the rink offered skating school, figure skating and private lessons, and it hosts NHL Learn to Play hockey for kids. Call to confirm this season's classes.",url:"https://www.nycgovparks.org/facilities/iceskating/1"}},
  skyrink:{
+  adult:{info:"Adults-only skate nights, like the Halloween Adult Skate Night on Fri, Oct 30, 8:30–9:50 PM. They're listed with general skating.",url:"https://bondsports.co/activity/programs/General%20Skating/10955"},
   lessons:{info:"Youth and adult skating school, private lessons and school-break camps, year-round.",url:"https://www.chelseapiers.com/sports/ice-skating"},
   figure:{info:"Drop-in freestyle sessions year-round for youth and adult figure skaters, or a freestyle subscription.",url:"https://www.chelseapiers.com/sports/figure-skating"}}
 };
