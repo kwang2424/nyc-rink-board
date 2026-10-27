@@ -1,6 +1,6 @@
 # NYC Rink Board
 
-Public skate schedules for NYC ice rinks on one timeline, sorted by distance, with what's open right now.
+Public skate schedules for NYC ice rinks on one timeline, sorted by distance, with what's open right now. Filter by activity: public skate, lessons, hockey, freestyle or adults-only skate.
 
 Live site: https://kwang2424.github.io/nyc-rink-board/
 
@@ -21,6 +21,10 @@ Edit `rinks.js` and bump `UPDATED` at the top.
 - `over` replaces the weekly hours for a date range, e.g. holiday hours or a second rink opening.
 - `conf` sets the label: `confirmed` (2026–27 hours), `posted` (official hours, opening date TBA), `last` (based on last season), `vary`.
 - `start` / `end` are the season dates. Use `start:null` with a `startLabel` when the opening date isn't announced.
+
+## Updating activities
+
+Activities live in `ACTS` at the bottom of `rinks.js`, keyed by rink id. Each entry needs `info` and `url`. Add `wk` (same format as above, with optional `start`, `end` and `over`) when the rink posts fixed times, and the activity gets its own timeline. Without `wk`, the rink shows as "offered" with a link to its calendar.
 
 ## Hosting
 

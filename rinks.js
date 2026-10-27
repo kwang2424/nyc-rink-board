@@ -80,3 +80,50 @@ const PLACES=[
  ["Mott Haven (Bronx)",40.8091,-73.9229],["Fordham (Bronx)",40.8615,-73.8905],["Riverdale (Bronx)",40.9005,-73.9064],
  ["St. George (Staten Island)",40.6437,-74.0736],["Jersey City (Downtown)",40.7178,-74.0431],["Hoboken",40.7440,-74.0324]
 ];
+
+// ---------- activities ----------
+// Public skate uses each rink's wk hours above. Other activities are listed per rink id below.
+// An activity with wk gets its own timeline (same format as above, plus optional start/end/over);
+// without wk the rink shows as "offered" with the info text and a link to its own calendar.
+const ACTIVITIES=[
+ {id:"public",label:"Public skate",noun:"public skate"},
+ {id:"lessons",label:"Lessons",noun:"lessons"},
+ {id:"hockey",label:"Hockey",noun:"hockey"},
+ {id:"figure",label:"Freestyle",noun:"figure skating freestyle"},
+ {id:"adult",label:"Adults only",noun:"adults-only skate"}
+];
+
+const ACTS={
+ wollman:{
+  lessons:{info:"Group and private lessons for kids and adults, plus weekly classes. Sign up with the lessons form.",url:"https://wollmanrinknyc.com/lessons/"},
+  hockey:{info:"Hockey programs run at the rink. Details on the lessons page.",url:"https://wollmanrinknyc.com/lessons/"},
+  figure:{info:"Figure skating programs and coaching.",url:"https://wollmanrinknyc.com/lessons/"}},
+ bryant:{
+  lessons:{info:"Private and semi-private lessons with coaches seven days a week. Buy a single lesson or a series; the center of the rink is kept for lessons.",url:"https://bryantpark.org/activities/the-rink"}},
+ gottesman:{
+  lessons:{info:"Learn to Skate group classes (Basic Skills 1–6) for tots through adults, and Learn to Play hockey with the New York Rangers for kids 5–10.",url:"https://daviscenter.centralparknyc.org/faq"},
+  hockey:{info:"Open Hockey pickup games for ages 10+ (no refs), an adult hockey clinic and an adult league.",url:"https://daviscenter.centralparknyc.org/faq"},
+  figure:{info:"Freestyle sessions for advanced skaters and figure skating practice.",url:"https://daviscenter.centralparknyc.org/faq"}},
+ brookfield:{
+  lessons:{info:"Lessons can be booked through the rink's site.",url:"https://www.bfplny.com/attractions/the-rink/"}},
+ roebling:{
+  lessons:{info:"Private and group lessons with Fireworks Skating Academy during select sessions on Tuesdays, Thursdays, Saturdays and Sundays. Admission is included; skates are extra.",url:"https://roeblingrink.com"}},
+ lefrak:{
+  lessons:{start:"2026-11-06",end:"2027-03-28",
+   wk:["11:00-12:00","","","","","17:30-18:30","09:00-10:00,11:00-12:00"],
+   over:[{from:"2026-11-24",to:"2026-11-29",h:["","","","","","",""]},{from:"2026-12-21",to:"2027-01-07",h:["","","","","","",""]},{from:"2027-02-15",to:"2027-02-25",h:["","","","","","",""]}],
+   info:"Learn to Skate classes in 30-minute slots: Parent & Me (2–3), Snowplow Sam (4–6), Basic Skills (7–14) and Adults (15+). Semesters: Nov 6 – Dec 20 ($210), Jan 8 – Feb 14 ($210), Feb 26 – Mar 28 ($175). Also private lessons and youth/adult Learn to Play hockey.",
+   url:"https://lakeside.prospectpark.org/activity/skating-school/"},
+  hockey:{info:"Stick ’n Puck on the Covered Rink for all ages: $13 per 50 min on weekdays, $25 weekends, goalies free. Helmet with cage, neck guard and gloves required. Also Adult Open Hockey and an adult league.",url:"https://lakeside.prospectpark.org/activity/stick-and-puck/"},
+  figure:{info:"Freestyle sessions for jumps, spins and programs, with or without a coach: $13 per 50 min or $20 per 80 min on weekdays, $25 weekends. No rental skates.",url:"https://lakeside.prospectpark.org/activity/freestyle-figure-skating/"},
+  adult:{info:"Adults-only public skate for ages 18+: $13 for 50 min, $15 for 60 min, $20 for 80 min. Bring your own skates.",url:"https://lakeside.prospectpark.org/activity/adult-public-skate/"}},
+ riverbank:{
+  lessons:{info:"Learn to Skate and ice dance classes for all ages.",url:"https://parks.ny.gov/parks/93"}},
+ worldice:{
+  lessons:{info:"Learn to Skate school for ages 4 through adult.",url:"https://www.nycgovparks.org/facilities/iceskating/10"},
+  hockey:{info:"Hockey programs, including adult open hockey. Call for current times.",url:"https://www.nycgovparks.org/facilities/iceskating/10"},
+  figure:{info:"Freestyle sessions for figure skaters.",url:"https://www.nycgovparks.org/facilities/iceskating/10"}},
+ skyrink:{
+  lessons:{info:"Youth and adult skating school, private lessons and school-break camps, year-round.",url:"https://www.chelseapiers.com/sports/ice-skating"},
+  figure:{info:"Drop-in freestyle sessions year-round for youth and adult figure skaters, or a freestyle subscription.",url:"https://www.chelseapiers.com/sports/figure-skating"}}
+};
