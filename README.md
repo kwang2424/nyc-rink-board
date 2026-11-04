@@ -32,7 +32,8 @@ Activities live in `ACTS` at the bottom of `rinks.js`, keyed by rink id. Each en
 
 Some rinks publish their schedules as public Google Calendars. `scripts/update_schedules.py` reads those feeds and writes `sessions.js` with every dated session for the next 60 days. On days the feeds cover, the site uses these sessions instead of the weekly hours in `rinks.js`, and the rink is labeled "Live from rink calendar".
 
-- Feeds are listed in `FEEDS` at the top of the script, each mapped to a rink id and activity.
+- Each run, the script reads the rink's schedule pages (`RINKS` in the script) and finds the Google Calendars embedded there, so it follows the rink when it swaps calendars.
+- Only calendars whose names match an activity rule (`RULES`) are used. Every event must also look like that activity, and anything that looks like staff business (interviews, meetings, trainings) is dropped, so unrelated entries never reach the site.
 - `.github/workflows/update-schedules.yml` runs the script every morning and commits only when a schedule changed. Run it any time from the Actions tab with **Run workflow**.
 - Run it locally: `pip install -r scripts/requirements.txt && python scripts/update_schedules.py`
 

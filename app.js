@@ -36,7 +36,7 @@ function status(r,ds,nowMin,noun){noun=noun||"public skate";
   const raw=hoursOn(r,ds),h=raw&&merge(raw);
   const notYet=(r.start?ds<r.start:(!r.yearRound&&!r.inSeasonNow))&&!(r.dated&&raw&&raw.length);
   if(r.end&&ds>r.end)return{k:"off",t:"Season over",h:[],ghost:false,skating:false};
-  if(notYet)return{k:"plan",t:r.start?"Opens "+DOW[dow(r.start)]+", "+pretty(r.start):"Opens Nov · date TBA",h:h||[],ghost:true,skating:false};
+  if(notYet)return{k:"plan",t:r.start?"Opens "+DOW[dow(r.start)]+", "+pretty(r.start):(r.startPill||"Opens Nov · date TBA"),h:h||[],ghost:true,skating:false};
   if(!h)return{k:"plan",t:r.actInfo?"Offered · times on rink calendar":"Times vary · check schedule",h:[],ghost:false,skating:null,vary:true};
   if(!h.length)return{k:"off",t:"No "+noun+" "+DOW[dow(ds)],h,ghost:false,skating:false};
   if(nowMin==null)return{k:"open",t:h.map(range).join(", "),h,ghost:false,skating:true,plain:true};
