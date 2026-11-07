@@ -1,6 +1,6 @@
 // Rink data. Edit this file to update hours, then commit.
 // wk: Sun..Sat, each a string of "HH:MM-HH:MM" segments separated by commas ("" = closed).
-const UPDATED="2026-11-04";
+const UPDATED="2026-11-07";
 const RINKS=[
  {id:"wollman",name:"Wollman Rink",where:"Central Park · Midtown",lat:40.7678,lng:-73.9745,io:"Outdoor",
   start:"2026-10-28",end:"2027-03-16",conf:"confirmed",
@@ -24,8 +24,8 @@ const RINKS=[
  {id:"gottesman",name:"Gottesman Rink",where:"Davis Center, Harlem Meer · Central Park North",lat:40.7964,lng:-73.9520,io:"Outdoor",
   start:null,startLabel:"Opening delayed to early November (date not posted)",startPill:"Delayed · opens early Nov",end:"2027-03-07",conf:"confirmed",
   wk:Array(7).fill("07:00-23:00"),
-  price:"Adults $5 off-peak (weekdays before 5 PM) · $10 peak. Kids 4–16 $5 anytime.",
-  note:"The Nov 1 opening was delayed; the rink now says it opens in early November, with no new date posted yet. 80-minute community skate sessions, plus an extended Saturday-night session with a live DJ. Hockey and lessons can block some time slots.",
+  price:"Adults $5 off-peak (weekdays before 5 PM) · $10 peak. Kids 4–16 $5 anytime. Figure and hockey skate rental $10.",
+  note:"The Nov 1 opening was delayed. As of Nov 7 the rink still says only \"early November\", with no new date posted. 80-minute community skate sessions, plus an extended Saturday-night session with a live DJ. Hockey and lessons can block some time slots.",
   url:"https://daviscenter.centralparknyc.org/skate"},
  {id:"brookfield",name:"The Rink at Brookfield Place",where:"Battery Park City",lat:40.7128,lng:-74.0158,io:"Outdoor",
   start:null,startLabel:"Opens in November (date not posted)",end:"2027-03-01",conf:"last",
